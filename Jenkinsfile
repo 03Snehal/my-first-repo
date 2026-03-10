@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out repo'
-                git 'https://github.com/THERARENFTARTIST/MyRep.git'
+                git 'https://github.com/03Snehal/my-first-repo.git'
             }
         }
 
