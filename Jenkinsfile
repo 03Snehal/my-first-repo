@@ -1,25 +1,32 @@
-pipeline {
-    agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                echo 'Checking out repo'
-                git 'https://github.com/03Snehal/my-first-repo.git'
-            }
+pipeline{
+  agent any
+  stages{
+    
+      stage('1. checkout'){
+        steps{
+          git url: 'https://github.com/03Snehal/my-first-repo.git',branch:'main'
         }
-
-        stage('Publish') {
-            steps {
-                publishHTML([
-                    allowMissing:true,
-                    alwaysLinkToLastBuild:false,
-                    keepAll:false,
-                    reportDir:'.',
-                    reportFiles:'Hello.html',
-                    reportName:'My HTML Pipe Page'
-                ])
-            }
+      }
+      
+      stage('2. Build Image'){
+        steps{
+          bat 'docker build -t hello .'
         }
-    }
-}      
+      }
+  
+      stage('3. Stop/Remove old Containers'){
+        steps{
+          bat 'docker stop mycont || exit 0'
+          bat 'docker rm mycount || exit 0'
+        }
+      }
+  
+      stage('4. Run the Image Containerize'){
+        steps{
+          bat 'docker run -d -p 5000:80 --name mycount hello'
+        }
+      }
+
+    
+  } 
+}
